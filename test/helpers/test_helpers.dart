@@ -3,6 +3,8 @@ import 'package:mockito/mockito.dart';
 import 'package:heycyan_demo/app/app.locator.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:heycyan_demo/services/hey_cyan_service.dart';
+import 'package:heycyan_demo/services/permission_handler_service.dart';
+import 'package:heycyan_demo/services/bluetooth_service.dart';
 // @stacked-import
 
 import 'test_helpers.mocks.dart';
@@ -14,6 +16,9 @@ import 'test_helpers.mocks.dart';
     MockSpec<BottomSheetService>(onMissingStub: OnMissingStub.returnDefault),
     MockSpec<DialogService>(onMissingStub: OnMissingStub.returnDefault),
     MockSpec<HeyCyanService>(onMissingStub: OnMissingStub.returnDefault),
+    MockSpec<PermissionHandlerService>(
+        onMissingStub: OnMissingStub.returnDefault),
+    MockSpec<BluetoothService>(onMissingStub: OnMissingStub.returnDefault),
 // @stacked-mock-spec
   ],
 )
@@ -22,6 +27,8 @@ void registerServices() {
   getAndRegisterBottomSheetService();
   getAndRegisterDialogService();
   getAndRegisterHeyCyanService();
+  getAndRegisterPermissionHandlerService();
+  getAndRegisterBluetoothService();
 // @stacked-mock-register
 }
 
@@ -83,6 +90,20 @@ MockHeyCyanService getAndRegisterHeyCyanService() {
   _removeRegistrationIfExists<HeyCyanService>();
   final service = MockHeyCyanService();
   locator.registerSingleton<HeyCyanService>(service);
+  return service;
+}
+
+MockPermissionHandlerService getAndRegisterPermissionHandlerService() {
+  _removeRegistrationIfExists<PermissionHandlerService>();
+  final service = MockPermissionHandlerService();
+  locator.registerSingleton<PermissionHandlerService>(service);
+  return service;
+}
+
+MockBluetoothService getAndRegisterBluetoothService() {
+  _removeRegistrationIfExists<BluetoothService>();
+  final service = MockBluetoothService();
+  locator.registerSingleton<BluetoothService>(service);
   return service;
 }
 // @stacked-mock-create

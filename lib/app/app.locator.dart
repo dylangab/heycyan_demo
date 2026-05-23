@@ -11,7 +11,9 @@ import 'package:stacked_services/src/dialog/dialog_service.dart';
 import 'package:stacked_services/src/navigation/navigation_service.dart';
 import 'package:stacked_shared/stacked_shared.dart';
 
+import '../services/bluetooth_service.dart';
 import '../services/hey_cyan_service.dart';
+import '../services/permission_handler_service.dart';
 
 final locator = StackedLocator.instance;
 
@@ -28,4 +30,6 @@ Future<void> setupLocator({
   locator.registerLazySingleton(() => DialogService());
   locator.registerLazySingleton(() => NavigationService());
   locator.registerLazySingleton(() => HeyCyanService());
+  locator.registerLazySingleton(() => PermissionHandlerService());
+  locator.registerLazySingleton(() => BluetoothService());
 }

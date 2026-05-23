@@ -1,14 +1,17 @@
 import 'package:flutter/services.dart';
+import 'package:heycyan_demo/app/app.locator.dart';
 import 'package:heycyan_demo/models/clients/glass_client.dart';
 import 'package:heycyan_demo/models/clients/mock_glass_client.dart';
 import 'package:heycyan_demo/models/clients/real_glass_client.dart';
 import 'package:heycyan_demo/models/devices/glass_device.dart';
+import 'package:heycyan_demo/services/bluetooth_service.dart';
 import 'package:logger/logger.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 
 class HeyCyanService with ListenableServiceMixin {
   final log = Logger();
+  final _bluetoothService = locator<BluetoothService>();
   GlassClient _client = RealGlassClient();
   GlassClient _mockClient = MockGlassClient();
   GlassDevice? _connectedDevice;
@@ -16,13 +19,19 @@ class HeyCyanService with ListenableServiceMixin {
   GlassDevice? get connectedDevice => _connectedDevice;
 
   Future<List<GlassDevice>> scan() async {
-    final results = await _client.scan();
+    await _bluetoothService.turnOnBluetooth();
+    bool isBluetoothTurnedOn = await _bluetoothService.isBluetoothTurnedOn();
+    if (isBluetoothTurnedOn) {
+      final results = await _client.scan();
 
-    if (results.isEmpty) {
-      return await _mockClient.scan();
+      if (results.isEmpty) {
+        return await _mockClient.scan();
+      }
+
+      return results;
+    } else {
+      return [];
     }
-
-    return results;
   }
 
   Future<void> connect(GlassDevice device) async {

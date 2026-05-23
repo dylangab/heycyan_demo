@@ -7,6 +7,8 @@ import 'package:stacked_services/stacked_services.dart';
 import 'package:heycyan_demo/services/hey_cyan_service.dart';
 import 'package:heycyan_demo/ui/views/scan/scan_view.dart';
 import 'package:heycyan_demo/ui/views/connected_device/connected_device_view.dart';
+import 'package:heycyan_demo/services/permission_handler_service.dart';
+import 'package:heycyan_demo/services/bluetooth_service.dart';
 // @stacked-import
 
 @StackedApp(
@@ -22,6 +24,8 @@ import 'package:heycyan_demo/ui/views/connected_device/connected_device_view.dar
     LazySingleton(classType: DialogService),
     LazySingleton(classType: NavigationService),
     LazySingleton(classType: HeyCyanService),
+    LazySingleton(classType: PermissionHandlerService),
+    LazySingleton(classType: BluetoothService),
 // @stacked-service
   ],
   bottomsheets: [

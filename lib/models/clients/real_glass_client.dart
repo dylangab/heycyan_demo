@@ -17,38 +17,42 @@ class RealGlassClient implements GlassClient {
 
   @override
   Future<List<GlassDevice>> scan() async {
-    final devices = <GlassDevice>[];
+    try {
+      final devices = <GlassDevice>[];
 
-    await FlutterBluePlus.startScan(timeout: const Duration(seconds: 5));
+      await FlutterBluePlus.startScan(timeout: const Duration(seconds: 5));
 
-    final subscription = FlutterBluePlus.scanResults.listen((results) {
-      for (final r in results) {
-        final name = r.device.platformName;
-        if (name.trim().isEmpty) continue;
-        if (!_isHeyCyanDevice(name)) continue;
+      final subscription = FlutterBluePlus.scanResults.listen((results) {
+        for (final r in results) {
+          final name = r.device.platformName;
+          if (name.trim().isEmpty) continue;
+          if (!_isHeyCyanDevice(name)) continue;
 
-        final exists = devices.any(
-          (d) => d.macAddress == r.device.remoteId.str,
-        );
-        if (!exists) {
-          devices.add(GlassDevice(
-            macAddress: r.device.remoteId.str,
-            name: name,
-            rssi: r.rssi,
-          ));
+          final exists = devices.any(
+            (d) => d.macAddress == r.device.remoteId.str,
+          );
+          if (!exists) {
+            devices.add(GlassDevice(
+              macAddress: r.device.remoteId.str,
+              name: name,
+              rssi: r.rssi,
+            ));
+          }
+
+          if (devices.length >= 30) FlutterBluePlus.stopScan();
         }
+      });
 
-        if (devices.length >= 30) FlutterBluePlus.stopScan();
-      }
-    });
+      await FlutterBluePlus.isScanning
+          .where((isScanning) => isScanning == false)
+          .first;
 
-    await FlutterBluePlus.isScanning
-        .where((isScanning) => isScanning == false)
-        .first;
+      await subscription.cancel();
 
-    await subscription.cancel();
-
-    return devices;
+      return devices;
+    } catch (e) {
+      return [];
+    }
   }
 
   @override

@@ -3,6 +3,7 @@ import 'package:heycyan_demo/app/app.bottomsheets.dart';
 import 'package:heycyan_demo/app/app.dialogs.dart';
 import 'package:heycyan_demo/app/app.locator.dart';
 import 'package:heycyan_demo/app/app.router.dart';
+import 'package:heycyan_demo/services/init_service.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 Future<void> main() async {
@@ -10,6 +11,7 @@ Future<void> main() async {
   await setupLocator();
   setupDialogUi();
   setupBottomSheetUi();
+  await InitService.init();
   runApp(const MainApp());
 }
 

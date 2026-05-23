@@ -9,7 +9,9 @@ import 'dart:ui' as _i7;
 
 import 'package:flutter/material.dart' as _i5;
 import 'package:heycyan_demo/models/devices/glass_device.dart' as _i9;
+import 'package:heycyan_demo/services/bluetooth_service.dart' as _i12;
 import 'package:heycyan_demo/services/hey_cyan_service.dart' as _i8;
+import 'package:heycyan_demo/services/permission_handler_service.dart' as _i11;
 import 'package:logger/logger.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i4;
@@ -715,6 +717,13 @@ class MockHeyCyanService extends _i1.Mock implements _i8.HeyCyanService {
       ) as _i2.Logger);
 
   @override
+  int get listenersCount => (super.noSuchMethod(
+        Invocation.getter(#listenersCount),
+        returnValue: 0,
+        returnValueForMissingStub: 0,
+      ) as int);
+
+  @override
   _i6.Future<List<_i9.GlassDevice>> scan() => (super.noSuchMethod(
         Invocation.method(
           #scan,
@@ -737,15 +746,14 @@ class MockHeyCyanService extends _i1.Mock implements _i8.HeyCyanService {
       ) as _i6.Future<void>);
 
   @override
-  _i6.Future<_i10.Uint8List> takePicture() => (super.noSuchMethod(
+  _i6.Future<_i10.Uint8List?> takePicture() => (super.noSuchMethod(
         Invocation.method(
           #takePicture,
           [],
         ),
-        returnValue: _i6.Future<_i10.Uint8List>.value(_i10.Uint8List(0)),
-        returnValueForMissingStub:
-            _i6.Future<_i10.Uint8List>.value(_i10.Uint8List(0)),
-      ) as _i6.Future<_i10.Uint8List>);
+        returnValue: _i6.Future<_i10.Uint8List?>.value(),
+        returnValueForMissingStub: _i6.Future<_i10.Uint8List?>.value(),
+      ) as _i6.Future<_i10.Uint8List?>);
 
   @override
   _i6.Future<void> disconnect() => (super.noSuchMethod(
@@ -758,12 +766,76 @@ class MockHeyCyanService extends _i1.Mock implements _i8.HeyCyanService {
       ) as _i6.Future<void>);
 
   @override
-  _i6.Future<void> testSdk() => (super.noSuchMethod(
+  void setConnectedDevice(_i9.GlassDevice? device) => super.noSuchMethod(
         Invocation.method(
-          #testSdk,
+          #setConnectedDevice,
+          [device],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void listenToReactiveValues(List<dynamic>? reactiveValues) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #listenToReactiveValues,
+          [reactiveValues],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void addListener(void Function()? listener) => super.noSuchMethod(
+        Invocation.method(
+          #addListener,
+          [listener],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void removeListener(void Function()? listener) => super.noSuchMethod(
+        Invocation.method(
+          #removeListener,
+          [listener],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void notifyListeners() => super.noSuchMethod(
+        Invocation.method(
+          #notifyListeners,
           [],
         ),
-        returnValue: _i6.Future<void>.value(),
-        returnValueForMissingStub: _i6.Future<void>.value(),
-      ) as _i6.Future<void>);
+        returnValueForMissingStub: null,
+      );
 }
+
+/// A class which mocks [PermissionHandlerService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockPermissionHandlerService extends _i1.Mock
+    implements _i11.PermissionHandlerService {
+  @override
+  _i6.Future<bool> get bluetoothPermissionsGranted => (super.noSuchMethod(
+        Invocation.getter(#bluetoothPermissionsGranted),
+        returnValue: _i6.Future<bool>.value(false),
+        returnValueForMissingStub: _i6.Future<bool>.value(false),
+      ) as _i6.Future<bool>);
+
+  @override
+  _i6.Future<bool> requestBluetoothPermissions() => (super.noSuchMethod(
+        Invocation.method(
+          #requestBluetoothPermissions,
+          [],
+        ),
+        returnValue: _i6.Future<bool>.value(false),
+        returnValueForMissingStub: _i6.Future<bool>.value(false),
+      ) as _i6.Future<bool>);
+}
+
+/// A class which mocks [BluetoothService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockBluetoothService extends _i1.Mock implements _i12.BluetoothService {}

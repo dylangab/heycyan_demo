@@ -110,7 +110,8 @@ class ScanView extends StackedView<ScanViewModel> {
                   itemBuilder: (context, index) {
                     final device = viewModel.discoverdDevices[index];
                     return HuiDeviceCard(
-                        isBusy: viewModel.isSelectedDeviceBusy && viewModel.isDeviceSelected(index),
+                        isBusy: viewModel.isSelectedDeviceBusy &&
+                            viewModel.isDeviceSelected(index),
                         name: device.displayName,
                         macAddress: device.macAddress,
                         rssi: device.rssi.toString(),
