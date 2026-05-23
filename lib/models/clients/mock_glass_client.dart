@@ -39,7 +39,7 @@ class MockGlassClient implements GlassClient {
   @override
   Future<Uint8List> takePicture() async {
     await Future.delayed(const Duration(seconds: 1));
-    final byteData = await rootBundle.load(AssetsConstants.splashScreen);
+    final byteData = await rootBundle.load(AssetsConstants.demoImage);
     return byteData.buffer.asUint8List();
   }
 

@@ -19,7 +19,7 @@ class RealGlassClient implements GlassClient {
   Future<List<GlassDevice>> scan() async {
     final devices = <GlassDevice>[];
 
-    await FlutterBluePlus.startScan(timeout: const Duration(seconds: 15));
+    await FlutterBluePlus.startScan(timeout: const Duration(seconds: 5));
 
     final subscription = FlutterBluePlus.scanResults.listen((results) {
       for (final r in results) {

@@ -83,28 +83,73 @@ class ConnectedDeviceView extends StackedView<ConnectedDeviceViewModel> {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(32.0),
+                  // CustomPaint handles drawing the camera corner brackets
                   child: Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         if (viewModel.isBusy) ...[
-                          HuiSpinner(),
+                          const HuiSpinner(),
                         ],
                         if (!viewModel.isBusy && viewModel.image == null) ...[
-                          Icon(Icons.camera_alt_outlined,
-                              color: kcBracketColor.withOpacity(0.6), size: 56),
+                          Icon(
+                            Icons.camera_alt_outlined,
+                            color: kcBracketColor.withOpacity(0.6),
+                            size: 56,
+                          ),
                           verticalSpace(16),
                           Text(
                             'NO PHOTO YET',
                             style: TextStyle(
-                                color: kcBracketColor.withOpacity(0.8),
-                                fontSize: 13,
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: 1.2),
+                              color: kcBracketColor.withOpacity(0.8),
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1.2,
+                            ),
                           ),
                         ],
                         if (!viewModel.isBusy && viewModel.image != null) ...[
-                          Expanded(child: Image.asset(viewModel.image!))
+                          // Stack allows us to overlay a clear badge over the preview asset safely
+                          Expanded(
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(16),
+                                  child: Image.file(
+                                    viewModel.image!,
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                                // Floating Action Badge to remove the captured frame
+                                Positioned(
+                                  top: 4,
+                                  right: 4,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      viewModel.removeImage();
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.all(6),
+                                      decoration: BoxDecoration(
+                                        color: Colors.black.withOpacity(0.7),
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                          color: Colors.white.withOpacity(0.2),
+                                          width: 1,
+                                        ),
+                                      ),
+                                      child: const Icon(
+                                        Icons.close,
+                                        color: Colors.white,
+                                        size: 16,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ],
                       ],
                     ),

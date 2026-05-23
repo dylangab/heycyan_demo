@@ -6,13 +6,20 @@ import 'package:logger/logger.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
+const String _selectDeviceBusyKey = '_selectDeviceBusyKey';
+
 class ScanViewModel extends BaseViewModel {
   final log = Logger();
   final _navigationService = locator<NavigationService>();
   final _heyCyanService = locator<HeyCyanService>();
 
+  bool get _isSelectDeviceBusyKey => busy(_selectDeviceBusyKey);
+  bool get isSelectedDeviceBusy => _isSelectDeviceBusyKey;
+
   List<GlassDevice> _discoverdDevices = [];
   List<GlassDevice> get discoverdDevices => _discoverdDevices;
+
+  GlassDevice? selectedDevice;
 
   void init() async {
     await startDiscovery();
@@ -27,7 +34,7 @@ class ScanViewModel extends BaseViewModel {
 
   Future<void> startDiscovery() async {
     setBusy(true);
-    // await Future.delayed(const Duration(seconds: 5));
+
     await startScan();
     setBusy(false);
   }
@@ -41,8 +48,13 @@ class ScanViewModel extends BaseViewModel {
   }
 
   void onSelectDevice(GlassDevice device) async {
+    setSelectedDevice(device);
+    setBusyForObject(_selectDeviceBusyKey, true);
+
     await connectToDevice(device);
-    _navigationService.navigateToConnectedDeviceView();
+    onNavigateToConnectedDeviceScreen();
+
+    setBusyForObject(_selectDeviceBusyKey, false);
   }
 
   void setDiscoverdDevices(List<GlassDevice> value) {
@@ -52,6 +64,22 @@ class ScanViewModel extends BaseViewModel {
 
   Future<void> connectToDevice(GlassDevice device) async {
     await _heyCyanService.connect(device);
+  }
+
+  void onNavigateToConnectedDeviceScreen() async {
+    final result = await _navigationService.navigateToConnectedDeviceView();
+    if (result != null) {
+      init();
+    }
+  }
+
+  void setSelectedDevice(GlassDevice value) {
+    selectedDevice = value;
+    notifyListeners();
+  }
+
+  bool isDeviceSelected(int index) {
+    return selectedDevice == discoverdDevices[index];
   }
 
   void navigateBack() {

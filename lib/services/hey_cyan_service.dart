@@ -31,7 +31,7 @@ class HeyCyanService with ListenableServiceMixin {
   }
 
   Future<Uint8List?> takePicture() async {
-    return await _client.takePicture();
+    return await _mockClient.takePicture();
   }
 
   Future<void> disconnect() async {
